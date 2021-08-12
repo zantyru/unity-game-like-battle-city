@@ -68,7 +68,15 @@ namespace Game
         
         protected void Move(Directions motionDirection, float deltaTime)
         {
-            if (motionDirection == Directions.NONE) return;
+            if (motionDirection == Directions.NONE)
+            {
+                // Preventing spontaneous sliding after colliding other being
+                if (_rigidbody.velocity.sqrMagnitude > 0.0f)
+                {
+                    _rigidbody.velocity = Vector2.zero;
+                }
+                return;
+            }
 
             Vector3 motion = motionDirection.GetVector3();
             Vector3 previousMotion = PreviousMotionDirection.GetVector3();
@@ -97,6 +105,8 @@ namespace Game
                     float nearSnapStep = Mathf.Floor(steps + 0.5f);
                     position.y = gridOriginY + nearSnapStep * gridCellSizeY;
                 }
+                // Apply snapped position
+                _rigidbody.position = position;
             }
 
             Vector2 resultPosition = position + motionDirection.GetVector2() * deltaTime * _speed;
