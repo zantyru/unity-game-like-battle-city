@@ -38,7 +38,7 @@ namespace Game
 
         public Directions PreviousMotionDirection { get; private set; } = Directions.NONE;
 
-        public IActionDataProvider ActionDataProvider { get; protected set; } = default;
+        public IActionDataProvider ActionDataProvider { get; protected set; } = new NoneActionDataProvider();
 
         #endregion
 
@@ -61,8 +61,9 @@ namespace Game
 
         #region Methods
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _rigidbody = GetComponent<Rigidbody2D>();
         }
         
