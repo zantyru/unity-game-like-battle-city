@@ -23,8 +23,9 @@ namespace Game
 
         public void SetDirection(Directions direction) => _spriteRenderer.sprite = _mapping[direction];
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _mapping[Directions.NONE] = _spriteRenderer.sprite;
             _mapping[Directions.LEFT] = _leftSprite;

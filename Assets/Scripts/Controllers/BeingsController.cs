@@ -1,26 +1,22 @@
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 
 namespace Game
 {
-    public sealed class BeingsController : BaseController, IInitializable, IFixedExecutable
+    public sealed class BeingsController : BaseController, IFixedExecutable
     {
         #region Fields
 
-        private BeingModel[] _beingModels = default;
         private readonly Dictionary<int, ActionData> _actionData = new Dictionary<int, ActionData>();
 
         #endregion
 
 
-        #region IInitializable
+        #region Properties
 
-        public void Initialize()
-        {
-            _beingModels = Object.FindObjectsOfType<BeingModel>();
-        }
-
+        public override Type AppropriateModelType => typeof(BeingModel);
+            
         #endregion
 
 
@@ -28,13 +24,12 @@ namespace Game
         
         public void FixedExecute(float deltaTime)
         {
-            foreach (BeingModel being in _beingModels)
+            foreach (BeingModel being in base.Models)
             {
                 if (_actionData.TryGetValue(being.GetInstanceID(), out var actionData))
                 {
                     being.Do(actionData, deltaTime);
                 }
-                // being.Do(_actionData[being.GetInstanceID()], deltaTime);
             }
         }
 
@@ -45,7 +40,7 @@ namespace Game
 
         protected override void _Execute(float deltaTime)
         {
-            foreach (BeingModel being in _beingModels)
+            foreach (BeingModel being in base.Models)
             {
                 _actionData[being.GetInstanceID()] = being.ActionDataProvider.GetActionData();
             }

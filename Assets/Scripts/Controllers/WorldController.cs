@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+
+
 namespace Game
 {
     public sealed class WorldController : BaseController
@@ -6,7 +10,15 @@ namespace Game
 
         private readonly BaseController[] _controllers;
         private readonly IFixedExecutable[] _fixedExecutableControllers;
+        private readonly Dictionary<Type, List<BaseController>> _mapping = new Dictionary<Type, List<BaseController>>();
         
+        #endregion
+
+
+        #region Properties
+        
+        public override Type AppropriateModelType => typeof(BaseModel);
+
         #endregion
 
 
@@ -14,8 +26,6 @@ namespace Game
 
         public WorldController()
         {
-            base.IsEnabled = true;
-
             var beingsController = new BeingsController();
 
             _controllers = new BaseController[]
@@ -30,13 +40,19 @@ namespace Game
                 // Place controller instances with fixed execution method here
             };
 
+            base.IsEnabled = true;
             foreach (BaseController controller in _controllers)
             {
-                controller.IsEnabled = true;
-                if (controller is IInitializable initializable)
+                Type controllerModelType = controller.AppropriateModelType;
+                List<BaseController> controllersForModel = default;
+                if (!_mapping.TryGetValue(controllerModelType, out controllersForModel))
                 {
-                    initializable.Initialize();
+                    controllersForModel = new List<BaseController>();
+                    _mapping[controllerModelType] = controllersForModel;
                 }
+                controllersForModel.Add(controller);
+
+                controller.IsEnabled = true;
             }
         }
 
@@ -55,10 +71,41 @@ namespace Game
 
         protected override void _Execute(float deltaTime)
         {
-            foreach (IExecutable controller in _controllers)
+            ProcessJustInstantiatedObjects();
+            foreach (BaseController controller in _controllers)
             {
                 controller.Execute(deltaTime);
             }
+            ProcessDeadObjects();
+        }
+
+        private void ProcessJustInstantiatedObjects()
+        {
+            foreach (BaseModel model in BaseModel.JustInstantiatedObjects)
+            {
+                foreach (List<BaseController> controllersForModel in _mapping.Values)                
+                {
+                    foreach (BaseController controller in controllersForModel)
+                    {
+                        Type modelType = model.GetType();
+                        Type appropriateModelType = controller.AppropriateModelType;
+                        if (modelType.IsSubclassOf(appropriateModelType) || modelType == appropriateModelType)
+                        {
+                            controller.AttachModel(model);
+                        }
+                    }
+                }
+            }
+            BaseModel.ClearJustInstantiatedObjects();
+        }
+
+        private void ProcessDeadObjects()
+        {
+            foreach (BaseModel model in BaseModel.DeadObjects)
+            {
+                // ...
+            }
+            BaseModel.ClearDeadObjects();
         }
 
         #endregion
