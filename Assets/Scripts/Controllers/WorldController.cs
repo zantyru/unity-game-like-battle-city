@@ -83,13 +83,13 @@ namespace Game
         {
             foreach (BaseModel model in BaseModel.JustInstantiatedObjects)
             {
-                foreach (List<BaseController> controllersForModel in _mapping.Values)                
+                Type modelType = model.GetType();
+                foreach (Type appropriateModelType in _mapping.Keys)
                 {
-                    foreach (BaseController controller in controllersForModel)
+                    if (modelType.IsSubclassOf(appropriateModelType) || modelType == appropriateModelType)
                     {
-                        Type modelType = model.GetType();
-                        Type appropriateModelType = controller.AppropriateModelType;
-                        if (modelType.IsSubclassOf(appropriateModelType) || modelType == appropriateModelType)
+                        List<BaseController> controllersForModel = _mapping[appropriateModelType];
+                        foreach (BaseController controller in controllersForModel)
                         {
                             controller.AttachModel(model);
                         }
