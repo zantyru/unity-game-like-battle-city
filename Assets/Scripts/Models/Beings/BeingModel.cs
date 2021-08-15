@@ -11,8 +11,8 @@ namespace Game
         #region Fields
         
         [SerializeField, Range(0.0f, 1000.0f)] private float _speed = 10.0f; // units per second
+        protected DirectionModel _directionModel = default;
         private Rigidbody2D _rigidbody = default;
-        private DirectionModel _directionModel = default;
         private BeingBodyModel _beingBodyModel = default;
         private LevelGridBehaviour _levelGridBehaviour = default;
 
