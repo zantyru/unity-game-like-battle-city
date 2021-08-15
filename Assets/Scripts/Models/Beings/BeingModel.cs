@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Game
 {
+    [RequireComponent(typeof(DirectionModel))]
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]
     public abstract class BeingModel : BaseModel, IActeable
@@ -10,33 +11,15 @@ namespace Game
         #region Fields
         
         [SerializeField, Range(0.0f, 1000.0f)] private float _speed = 10.0f; // units per second
-        private Directions _headDirection = Directions.NONE;
         private Rigidbody2D _rigidbody = default;
-        private LevelGridBehaviour _levelGridBehaviour = default;
+        private DirectionModel _directionModel = default;
         private BeingBodyModel _beingBodyModel = default;
+        private LevelGridBehaviour _levelGridBehaviour = default;
 
         #endregion
 
 
         #region Properties
-
-        public Directions HeadDirection
-        {
-            get => _headDirection;
-            set
-            {
-                PreviousHeadDirection = _headDirection;
-                _headDirection = value;
-                if (_beingBodyModel)
-                {
-                    _beingBodyModel.SetDirection(_headDirection);
-                }
-            }
-        }
-
-        public Directions PreviousHeadDirection { get; private set; } = Directions.NONE;
-
-        public Directions PreviousMotionDirection { get; private set; } = Directions.NONE;
 
         public IActionDataProvider ActionDataProvider { get; protected set; } = new NoneActionDataProvider();
 
@@ -50,10 +33,14 @@ namespace Game
             Directions newHeadDirection = actionData.HeadDirection;
             if (newHeadDirection == Directions.NONE)
             {
-                newHeadDirection = PreviousHeadDirection;
+                newHeadDirection = _directionModel.PreviousHeadDirection;
             }
-            HeadDirection = newHeadDirection;
-            Move(actionData.MotionDirection, deltaTime);
+
+            _directionModel.HeadDirection = newHeadDirection;
+            _directionModel.MotionDirection = actionData.MotionDirection;
+            
+            _beingBodyModel.SetDirection(_directionModel.HeadDirection);
+            Move(_directionModel.MotionDirection, deltaTime);
         }
 
         #endregion
@@ -65,6 +52,7 @@ namespace Game
         {
             base.Awake();
             _rigidbody = GetComponent<Rigidbody2D>();
+            _directionModel = GetComponent<DirectionModel>();
         }
         
         protected void Move(Directions motionDirection, float deltaTime)
@@ -79,46 +67,34 @@ namespace Game
                 return;
             }
 
-            Vector3 motion = motionDirection.GetVector3();
-            Vector3 previousMotion = PreviousMotionDirection.GetVector3();
-            bool isNotCollineary = !motion.IsXYCollineary(previousMotion);
-
             Vector2 position = _rigidbody.position;
-            if (isNotCollineary)
+            if (motionDirection == Directions.UP || motionDirection == Directions.DOWN)
             {
-                if (motionDirection == Directions.UP || motionDirection == Directions.DOWN)
-                {
-                    // Snapping `x`
-                    float gridCellSizeX = _levelGridBehaviour.CellSizeX;
-                    float gridOriginX = _levelGridBehaviour.OriginX;
-                    float diff = position.x - gridOriginX;
-                    float steps = diff / gridCellSizeX;
-                    float nearSnapStep = Mathf.Floor(steps + 0.5f);
-                    position.x = gridOriginX + nearSnapStep * gridCellSizeX;
-                }
-                else if (motionDirection == Directions.LEFT || motionDirection == Directions.RIGHT)
-                {
-                    // Snapping `y`
-                    float gridCellSizeY = _levelGridBehaviour.CellSizeY;
-                    float gridOriginY = _levelGridBehaviour.OriginY;
-                    float diff = position.y - gridOriginY;
-                    float steps = diff / gridCellSizeY;
-                    float nearSnapStep = Mathf.Floor(steps + 0.5f);
-                    position.y = gridOriginY + nearSnapStep * gridCellSizeY;
-                }
-                // Apply snapped position
-                _rigidbody.position = position;
+                position.x = SnapValue(position.x, _levelGridBehaviour.CellSizeX, _levelGridBehaviour.OriginX);
             }
+            else if (motionDirection == Directions.LEFT || motionDirection == Directions.RIGHT)
+            {
+                position.y = SnapValue(position.y, _levelGridBehaviour.CellSizeY, _levelGridBehaviour.OriginY);
+            }
+            // Apply snapped position
+            _rigidbody.position = position;
 
             Vector2 resultPosition = position + motionDirection.GetVector2() * deltaTime * _speed;
             _rigidbody.MovePosition(resultPosition);
-            PreviousMotionDirection = motionDirection;
         }
 
         private void Start()
         {
             _levelGridBehaviour = FindObjectsOfType<LevelGridBehaviour>()[0];
             _beingBodyModel = GetComponentInChildren<BeingBodyModel>();
+        }
+
+        private float SnapValue(float value, float gridStepSize, float gridOrigin)
+        {
+            float diff = value - gridOrigin;
+            float steps = diff / gridStepSize;
+            float nearSnapStep = Mathf.Floor(steps + 0.5f);
+            return gridOrigin + nearSnapStep * gridStepSize;
         }
 
         #endregion

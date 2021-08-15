@@ -29,12 +29,18 @@ namespace Game
             get => _motionDirection;
             set
             {
+                if (PreviousNotNoneMotionDirection == Directions.NONE || _motionDirection != Directions.NONE)
+                {
+                    PreviousNotNoneMotionDirection = _motionDirection;
+                }
                 PreviousMotionDirection = _motionDirection;
                 _motionDirection = value;
             }
         }
 
         public Directions PreviousMotionDirection { get; private set; } = Directions.NONE;
+
+        public Directions PreviousNotNoneMotionDirection { get; private set; } = Directions.NONE;
 
         #endregion
     }
