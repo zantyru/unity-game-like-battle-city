@@ -27,16 +27,19 @@ namespace Game
         public WorldController()
         {
             var beingsController = new BeingsController();
+            var spawnerController = new SpawnerController();
 
             _controllers = new BaseController[]
             {
                 beingsController,
+                spawnerController,
                 // Place controller instances here
             };
 
             _fixedExecutableControllers = new IFixedExecutable[]
             {
                 beingsController,
+                spawnerController,
                 // Place controller instances with fixed execution method here
             };
 

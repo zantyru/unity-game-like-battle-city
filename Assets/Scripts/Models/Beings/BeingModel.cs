@@ -54,6 +54,12 @@ namespace Game
             _rigidbody = GetComponent<Rigidbody2D>();
             _directionModel = GetComponent<DirectionModel>();
         }
+
+        protected virtual void Start()
+        {
+            _levelGridBehaviour = FindObjectsOfType<LevelGridBehaviour>()[0];
+            _beingBodyModel = GetComponentInChildren<BeingBodyModel>();
+        }
         
         protected void Move(Directions motionDirection, float deltaTime)
         {
@@ -81,12 +87,6 @@ namespace Game
 
             Vector2 resultPosition = position + motionDirection.GetVector2() * deltaTime * _speed;
             _rigidbody.MovePosition(resultPosition);
-        }
-
-        private void Start()
-        {
-            _levelGridBehaviour = FindObjectsOfType<LevelGridBehaviour>()[0];
-            _beingBodyModel = GetComponentInChildren<BeingBodyModel>();
         }
 
         private float SnapValue(float value, float gridStepSize, float gridOrigin)

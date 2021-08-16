@@ -4,16 +4,16 @@ namespace Game
     {
         #region Methods
 
-        protected override void Awake()
+        protected override void Start()
         {
-            base.Awake();
+            base.Start();
             base.ActionDataProvider = new BulletActionDataProvider(base._directionModel.MotionDirection);
         }
         
-        private void OnCollisionEnter()
-        {
-            Destroy(this.gameObject);
-        }
+        // private void OnCollisionEnter()
+        // {
+        //     Destroy(this.gameObject);
+        // }
 
         #endregion
     }
