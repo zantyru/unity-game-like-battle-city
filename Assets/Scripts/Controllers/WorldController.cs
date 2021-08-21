@@ -75,11 +75,11 @@ namespace Game
         protected override void _Execute(float deltaTime)
         {
             ProcessJustInstantiatedObjects();
+            ProcessDeadObjects(); // Influence to `FixedUpdate`
             foreach (BaseController controller in _controllers)
             {
                 controller.Execute(deltaTime);
             }
-            ProcessDeadObjects();
         }
 
         private void ProcessJustInstantiatedObjects()
@@ -106,7 +106,18 @@ namespace Game
         {
             foreach (BaseModel model in BaseModel.DeadObjects)
             {
-                // ...
+                Type modelType = model.GetType();
+                foreach (Type appropriateModelType in _mapping.Keys)
+                {
+                    if (modelType.IsSubclassOf(appropriateModelType) || modelType == appropriateModelType)
+                    {
+                        List<BaseController> controllersForModel = _mapping[appropriateModelType];
+                        foreach (BaseController controller in controllersForModel)
+                        {
+                            controller.DetachModel(model);
+                        }
+                    }
+                }
             }
             BaseModel.ClearDeadObjects();
         }

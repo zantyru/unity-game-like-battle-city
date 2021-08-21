@@ -15,16 +15,16 @@ namespace Game
 
 
         #region Properties
-        
-        public Vector3 Position
-        {
-            get => this.transform.position;
-            set => this.transform.position = value;
-        }
 
         public static IEnumerable<BaseModel> JustInstantiatedObjects => _justInstantiatedObjects;
 
         public static IEnumerable<BaseModel> DeadObjects => _deadObjects;
+        
+        public Vector3 Position { get => this.transform.position; set => this.transform.position = value; }
+
+        public bool IsDestroyingSelf { get; private set; } = false;
+
+        public bool IsDestroyingGameObject { get; private set; } = false;
 
         #endregion
 
@@ -33,7 +33,30 @@ namespace Game
 
         public static void ClearJustInstantiatedObjects() => _justInstantiatedObjects.Clear();
 
-        public static void ClearDeadObjects() => _deadObjects.Clear();
+        public static void ClearDeadObjects()
+        {
+            foreach (BaseModel model in _deadObjects)
+            {
+                Object.Destroy(model.IsDestroyingGameObject ? (Object)model.gameObject : (Object)model);
+            }
+            _deadObjects.Clear();
+        }
+
+        public virtual void DestroyGameObject()
+        {
+            IsDestroyingGameObject = true;
+            BaseModel[] models = GetComponents<BaseModel>();
+            foreach (BaseModel model in models)
+            {   
+                model.DestroySelf();
+            }
+        }
+
+        public virtual void DestroySelf()
+        {
+            IsDestroyingSelf = true;
+            _deadObjects.Enqueue(this);
+        }
 
         protected virtual void Awake() => _justInstantiatedObjects.Enqueue(this);
 

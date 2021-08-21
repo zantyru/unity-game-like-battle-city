@@ -10,10 +10,11 @@ namespace Game
             base.ActionDataProvider = new BulletActionDataProvider(base._directionModel.MotionDirection);
         }
         
-        // private void OnCollisionEnter()
-        // {
-        //     Destroy(this.gameObject);
-        // }
+        private void OnCollisionEnter2D(UnityEngine.Collision2D collision)
+        {
+            base.DestroyGameObject();
+            UnityEngine.Object.Destroy(collision.gameObject, 0.1f);
+        }
 
         #endregion
     }

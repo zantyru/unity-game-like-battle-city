@@ -16,7 +16,7 @@ namespace Game
 
         public void FixedExecute(float deltaTime)
         {
-            foreach (SpawnerModel spawner in base.Models)
+            foreach (SpawnerModel spawner in base.Models)            
             {
                 ActionData actionData = new ActionData()
                 {

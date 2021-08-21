@@ -21,7 +21,15 @@ namespace Game
 
         #region Methods
 
-        public void SetDirection(Directions direction) => _spriteRenderer.sprite = _mapping[direction];
+        public void SetDirection(Directions direction)
+        {
+            // Note: I know about https://forum.unity.com/threads/optimizing-null-check-null-vs-bool-out-functions.482118/
+            // It's not time to do micro-optimizations yet
+            //if (_spriteRenderer != null)
+            //{
+                _spriteRenderer.sprite = _mapping[direction];
+            //}
+        }
 
         protected override void Awake()
         {
