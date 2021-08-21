@@ -21,10 +21,7 @@ namespace Game
 
         #region Methods
 
-        public void SetDirection(Directions direction)
-        {
-            _spriteRenderer.sprite = _mapping[direction];
-        }
+        public void SetDirection(Directions direction) => _spriteRenderer.sprite = _mapping[direction];
 
         protected override void Awake()
         {
