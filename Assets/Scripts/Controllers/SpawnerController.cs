@@ -3,7 +3,7 @@ using System;
 
 namespace Game
 {
-    public sealed class SpawnerController : BaseController, IFixedExecutable
+    public sealed class SpawnerController : BaseController
     {
         #region Properties
         
@@ -12,28 +12,20 @@ namespace Game
         #endregion
 
 
-        #region IFixedExecutable
-
-        public void FixedExecute(float deltaTime)
-        {
-            foreach (SpawnerModel spawner in base.Models)            
-            {
-                ActionData actionData = new ActionData()
-                {
-                    HeadDirection = spawner.SpawnDirection,
-                    MotionDirection = spawner.SpawnDirection,
-                    IsShooting = false
-                };
-                spawner.Do(actionData, deltaTime);
-            }
-        }
-            
-        #endregion
-
-
         #region Methods
         
-        protected override void _Execute(float deltaTime) { }
+        protected override void FixedProcessModel(BaseModel model, float deltaTime)
+        {
+            base.FixedProcessModel(model, deltaTime);
+            SpawnerModel spawner = model as SpawnerModel;
+            ActionData actionData = new ActionData()
+            {
+                HeadDirection = spawner.SpawnDirection,
+                MotionDirection = spawner.SpawnDirection,
+                IsShooting = false
+            };
+            spawner.Do(actionData, deltaTime);
+        }
 
         #endregion
     }

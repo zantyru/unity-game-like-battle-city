@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Game
 {
-    public abstract class BaseController : IExecutable
+    public abstract class BaseController : IExecutable, IFixedExecutable
     {
         #region Fields
 
@@ -28,7 +28,37 @@ namespace Game
 
         public void Execute(float deltaTime)
         {
-            if (IsEnabled) _Execute(deltaTime);
+            if (IsEnabled)
+            {
+                foreach (BaseModel model in Models)
+                {
+                    if (model.IsDestroyingSelf)
+                    {
+                        continue;
+                    }
+                    ProcessModel(model, deltaTime);
+                }
+            }
+        }
+
+        #endregion
+
+
+        #region IFixedExecutable
+
+        public void FixedExecute(float deltaTime)
+        {
+            if (IsEnabled)
+            {
+                foreach (BaseModel model in Models)
+                {
+                    if (model.IsDestroyingSelf)
+                    {
+                        continue;
+                    }
+                    FixedProcessModel(model, deltaTime);
+                }
+            }
         }
 
         #endregion
@@ -40,7 +70,9 @@ namespace Game
 
         public void DetachModel(BaseModel model) => _models.Remove(model.GetInstanceID());
 
-        protected abstract void _Execute(float deltaTime);
+        protected virtual void ProcessModel(BaseModel model, float deltaTime) { }
+
+        protected virtual void FixedProcessModel(BaseModel model, float deltaTime) { }
 
         #endregion
     }

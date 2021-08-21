@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Game
 {
-    public sealed class BeingsController : BaseController, IFixedExecutable
+    public sealed class BeingsController : BaseController
     {
         #region Fields
 
@@ -20,29 +20,22 @@ namespace Game
         #endregion
 
 
-        #region IFixedExecutable
-        
-        public void FixedExecute(float deltaTime)
-        {
-            foreach (BeingModel being in base.Models)
-            {
-                if (_actionData.TryGetValue(being.GetInstanceID(), out var actionData))
-                {
-                    being.Do(actionData, deltaTime);
-                }
-            }
-        }
-
-        #endregion
-
-
         #region Methods
 
-        protected override void _Execute(float deltaTime)
+        protected override void ProcessModel(BaseModel model, float deltaTime)
         {
-            foreach (BeingModel being in base.Models)
+            base.ProcessModel(model, deltaTime);
+            BeingModel being = model as BeingModel;
+            _actionData[being.GetInstanceID()] = being.ActionDataProvider.GetActionData();
+        }
+
+        protected override void FixedProcessModel(BaseModel model, float deltaTime)
+        {
+            base.FixedProcessModel(model, deltaTime);
+            BeingModel being = model as BeingModel;
+            if (_actionData.TryGetValue(being.GetInstanceID(), out var actionData))
             {
-                _actionData[being.GetInstanceID()] = being.ActionDataProvider.GetActionData();
+                being.Do(actionData, deltaTime);
             }
         }
 

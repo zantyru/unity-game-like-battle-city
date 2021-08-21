@@ -216,7 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 1627229424058545532, guid: 288767b253065286fa50ad1b8757a1b5, type: 3}
   _direction: 2
-  _coolDownTimeout: 0.035
+  _coolDownTimeout: 0.05
 --- !u!4 &757263504
 Transform:
   m_ObjectHideFlags: 0

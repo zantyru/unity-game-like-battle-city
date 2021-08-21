@@ -64,7 +64,7 @@ namespace Game
 
         #region Methods
 
-        public void FixedExecute(float deltaTime)
+        new public void FixedExecute(float deltaTime)
         {
             foreach (IFixedExecutable controller in _fixedExecutableControllers) 
             {
@@ -72,7 +72,7 @@ namespace Game
             }
         }
 
-        protected override void _Execute(float deltaTime)
+        new public void Execute(float deltaTime)
         {
             ProcessJustInstantiatedObjects();
             ProcessDeadObjects(); // Influence to `FixedUpdate`

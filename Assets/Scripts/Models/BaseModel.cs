@@ -60,6 +60,15 @@ namespace Game
 
         protected virtual void Awake() => _justInstantiatedObjects.Enqueue(this);
 
+        private void OnDestroy()
+        {
+            // If the destruction initialized somebody else
+            if (!IsDestroyingSelf)
+            {
+                DestroySelf();
+            }
+        }
+
         #endregion
     }
 }
