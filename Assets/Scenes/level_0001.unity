@@ -216,7 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 1627229424058545532, guid: 288767b253065286fa50ad1b8757a1b5, type: 3}
   _direction: 2
-  _coolDownTimeout: 0.05
+  _coolDownTimeout: 0.075
 --- !u!4 &757263504
 Transform:
   m_ObjectHideFlags: 0
@@ -386,7 +386,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1670337140}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 11676e8281000dd7e8a1f0f29611f609, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -419,7 +419,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 11676e8281000dd7e8a1f0f29611f609, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -493,7 +493,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1810510266}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 11676e8281000dd7e8a1f0f29611f609, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -526,7 +526,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 11676e8281000dd7e8a1f0f29611f609, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -2341,16 +2341,6 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: 31, y: 5, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 5
-      m_TileSpriteIndex: 5
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
   - first: {x: -25, y: 6, z: 0}
     second:
       serializedVersion: 2
@@ -2436,16 +2426,6 @@ Tilemap:
       serializedVersion: 2
       m_TileIndex: 2
       m_TileSpriteIndex: 2
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 31, y: 6, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 5
-      m_TileSpriteIndex: 5
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3803,7 +3783,7 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 68488f6cf9e0b08a5bb1626dafa4f8fc, type: 2}
   - m_RefCount: 22
     m_Data: {fileID: 11400000, guid: 777f54b81062b74af8cb54ada5c913ed, type: 2}
-  - m_RefCount: 180
+  - m_RefCount: 178
     m_Data: {fileID: 11400000, guid: bbfd8b06a82678c53a4909b99aa343e7, type: 2}
   - m_RefCount: 4
     m_Data: {fileID: 11400000, guid: 15e5887b01f12c862bf5b178f4286675, type: 2}
@@ -3825,7 +3805,7 @@ Tilemap:
   - m_RefCount: 22
     m_Data: {fileID: -5306351087552503934, guid: e32794e7eb7996cdd94f31dafe5e0002,
       type: 3}
-  - m_RefCount: 180
+  - m_RefCount: 178
     m_Data: {fileID: -8450619338865491994, guid: e32794e7eb7996cdd94f31dafe5e0002,
       type: 3}
   - m_RefCount: 4
@@ -3835,7 +3815,7 @@ Tilemap:
     m_Data: {fileID: -8637769448447171875, guid: e32794e7eb7996cdd94f31dafe5e0002,
       type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 287
+  - m_RefCount: 285
     m_Data:
       e00: 1
       e01: 0
@@ -3854,7 +3834,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 287
+  - m_RefCount: 285
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -3954,7 +3934,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 2092169916}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 11676e8281000dd7e8a1f0f29611f609, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -3987,7 +3967,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 11676e8281000dd7e8a1f0f29611f609, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
